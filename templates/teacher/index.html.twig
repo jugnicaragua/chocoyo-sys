@@ -3,7 +3,7 @@
 {% block title %}Teacher index{% endblock %}
 
 {% block body %}
-    <h1>Teacher index</h1>
+    <h1>Teachers index</h1>
 
     <table class="table">
         <thead>
@@ -31,8 +31,8 @@
                 <td>{{ teacher.active ? 'Yes' : 'No' }}</td>
                 <td>{{ teacher.title }}</td>
                 <td>
-                    <a href="{{ path('teacher_show', {'id': teacher.id}) }}">show</a>
-                    <a href="{{ path('teacher_edit', {'id': teacher.id}) }}">edit</a>
+                    <a href="{{ path('teacher_show', {'id': teacher.id}) }}" class="btn btn-secondary" >show</a>
+                    <a href="{{ path('teacher_edit', {'id': teacher.id}) }}" class="btn btn-success">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -43,5 +43,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('teacher_new') }}">Create new</a>
+    <a href="{{ path('teacher_new') }}"  class="btn btn-primary" >Create new</a>
 {% endblock %}
