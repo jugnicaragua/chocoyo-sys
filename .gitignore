@@ -67,3 +67,12 @@
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+/.env.local
+/.env.prd
+/.env.test
+/composer.lock
+/chocoyo-sys.tar.gz
+/symfony.lock
+
+#IDE
+.idea
