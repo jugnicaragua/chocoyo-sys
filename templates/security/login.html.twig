@@ -1,0 +1,241 @@
+{# templates/security/login.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Chocoyo, Iniciar Session{% endblock %}
+
+{% block stylesheets  %}
+    <style>
+        .login-form {
+            width: 340px;
+            margin: 30px auto;
+            font-size: 15px;
+        }
+        .login-form form {
+            margin-bottom: 15px;
+            background: #f7f7f7;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+        .login-form h2 {
+            margin: 0 0 15px;
+        }
+        .login-form .hint-text {
+            color: #777;
+            padding-bottom: 15px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .form-control, .btn {
+            min-height: 38px;
+            border-radius: 2px;
+        }
+        .login-btn {
+            font-size: 15px;
+            font-weight: bold;
+        }
+        .or-seperator {
+            margin: 20px 0 10px;
+            text-align: center;
+            border-top: 1px solid #ccc;
+        }
+        .or-seperator i {
+            padding: 0 10px;
+            background: #f7f7f7;
+            position: relative;
+            top: -11px;
+            z-index: 1;
+        }
+        .social-btn .btn {
+            margin: 10px 0;
+            font-size: 15px;
+            text-align: left;
+            line-height: 24px;
+        }
+        .social-btn .btn i {
+            float: left;
+            margin: 4px 15px  0 5px;
+            min-width: 15px;
+        }
+        .input-group-addon .fa{
+            font-size: 18px;
+        }
+    </style>
+
+{% endblock %}
+
+
+{% block body %}
+    <script src="https://www.google.com/recaptcha/api.js?render={{ gg_recaptcha_site_key }}"></script>
+
+
+    <div class="login-form" style="width: 450px;">
+        <form class="form-horizontal" role="form"  method="post" id="frmFirmForm">
+            <input type="hidden" name="_target_path" value="">
+
+            <center>
+
+            </center>
+
+            <!-- ERROR DIV -->
+            <div>
+                {% if error %}
+                    <div class="alert alert-danger ">
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
+                {% if app.user %}
+                    <div class="mb-3" style="border: black;">
+                        Actualmente ya inició sessión como: "{{ app.user.username }}" , <a href="{{ path('app_logout') }}">Cerrar Sessión.</a>
+                    </div>
+                {% endif %}
+                <div class="alert alert-danger collapse" id="myAlert">
+                    Por favor ingrese una dirección de correo electrónico.
+                </div>
+            </div>
+            <!--end error div -->
+
+            <h2 class="text-center"><strong>Iniciar sesión</strong></h2>
+            <small class="text-muted"></small>
+            <div class="">
+            <div class="social-btn d-flex " style="height: 40px;align-items: baseline;top: inherit;align-content: flex-end;alignment: right;">
+                <span style="width: 200px;"></span>
+                <a href="#" class="btn btn-info btn-block"    style="width: 40px;height: 40px;"><i class="fa fa-twitter"></i> </a>
+                <a href="#" class="btn btn-danger btn-block"  style="width: 40px;height: 40px;"><i class="fa fa-google"></i> </a>
+                <a href="#" class="btn btn-primary btn-block" style="width: 40px;height: 40px;"><i class="fa fa-facebook"></i></a>
+            </div>
+            </div>
+
+            <div class="or-seperator"><i>o</i></div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <span class="fa fa-user"></span>
+                    </span>
+                    </div>
+                    <input id="inputEmail" type="text" class="form-control"  name="username" placeholder="Username(email)" value="{{ last_username }}" required autofocus
+                    onchange="javascript:document.getElementById('spanEmailrecover').value=(this.value);" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fa fa-lock"></i>
+                    </span>
+                    </div>
+                    <input id="inputPassword" type="password" class="form-control" name="_password" placeholder="Password" required />
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+                <button class="btn btn-success btn-block login-btn g-recaptcha"
+                        data-sitekey="{{ gg_recaptcha_site_key }}"
+                        data-callback='onSubmit'
+                        data-action='submit'
+                        type="submit">
+                    <i class="fa fa-btn fa-sign-in"></i> Entrar
+                </button>
+            </div>
+
+            <div class="clearfix">
+                <label class="float-left form-check-label"><input type="checkbox"> Recuerdame</label>
+                <a href="#" class="float-right text-success" onclick="javascript:recoverPasswordDlg()" data-toggle="modal" >
+                    ¿Olvidaste tu clave?
+                </a>
+            </div>
+        </form>
+
+        <div class="hint-text">No tienes cuenta? <a href="{{ path('registration') }}" class="text-success">Crear una ahora</a></div>
+        </div>
+
+        <div class="hint-text"></div>
+    </div>
+
+    <!-- recover password -->
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form action="/resetpws" method="post" name="frmReset" >
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Recuperando clave</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        Se enviará un correo para recuperar tu clave a: <input type="text"  style="font-style: italic;border: none;" id="spanEmailrecover" name="spanEmailrecover"  readonly></input>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary"> Si, enviar por favor. </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script language="JavaScript">
+
+        function recoverPasswordDlg() {
+            if ( ValidateEmail( $('#inputEmail').val() ) ){
+                $('#spanEmailrecover').val( $('#inputEmail').val()  );
+                $('#exampleModal').modal("show");
+                $('#myAlert').hide('fade');
+            }else{
+                $('#myAlert').show('fade');
+            }
+        }
+
+        function onSubmit(token) {
+            if ( ValidateEmail($('#inputEmail').val() ) ) {
+                document.getElementById("frmFirmForm").submit();
+                $('#myAlert').hide('fade');
+            }else{
+                $('#myAlert').show('fade');
+            }
+        }
+
+        //RECAPTCHA
+        grecaptcha.ready(function() {
+            var email = $('#inputEmail').val() != "";
+            {% if gt_env == "prod" %}
+                if (email != "" ) {
+                    if (ValidateEmail(email)) {
+                        alert(' estamos en prod');
+                        $('#myAlert').hide('fade');
+                        grecaptcha.execute('{{ gg_recaptcha_site_key }}', {action: 'frmFirmForm'})
+                        .then(function (token) {
+                            $('#frmFirmForm').prepend('<input type="hidden" name="token" value="' + token + '">');
+                            //$('#newsletterForm').prepend('<input type="hidden" name="action" value="subscribe_newsletter">');
+                            $('#frmFirmForm').unbind('submit').submit();
+                        });
+                } else
+                    $('#myAlert').show('fade');
+            }
+            {% else %}
+                //alert(' DEV'); launch submit
+                //$('#frmFirmForm').unbind('submit').submit();
+            {% endif %}
+        });
+
+        function ValidateEmail(email)
+        {
+            return true;
+            if ( email == "" || email == undefined )
+                return false;
+            if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test( email ))
+                return (true)
+            else
+                return (false)
+        }
+    </script>
+
+{% endblock %}

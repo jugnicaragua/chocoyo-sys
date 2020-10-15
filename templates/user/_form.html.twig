@@ -1,0 +1,209 @@
+<h3 class="">Informacion del usuario</h3>
+
+<br/>
+
+<!-- Nav tabs -->
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a id="nav-home-tab" class="nav-link active"  data-toggle="tab" href="#tabData" role="tab" aria-controls="nav-data" aria-selected="true">Datos</a>
+        <a id="nav-meta-tab" class="nav-link"  data-toggle="tab" href="#tabMeta" role="tab" aria-controls="nav-meta" aria-selected="false">Meta Data</a>
+    </div>
+</nav>
+
+
+<div class="tab-content" id="nav-tabDefaultContent">
+    <div id="tabData" class="tab-pane fade show active" role="tabpanel" aria-labelledby="nav-data-tab">
+        {{ form_start(form, {'method': 'POST'} ) }}
+        <input type="hidden" name="_aaction" >
+        <div class="form">
+
+            <div class="form-row row-cols-2">
+                <div class="col">
+                    {{ form_row(form.email, {'attr': {'class': 'form-control', 'readonly': true} } ) }}
+                </div>
+                <div class="col">
+                    {{ form_row(form.name, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+
+            <div class="form-row row-cols-2 hide" style="" >
+                <div class="col" >
+                    <label for="txtRoles">Roles</label>
+                    {% if user is defined and user.roles is defined %}
+                    <input id="txtRoles" class="form-control" aria-describedby="envHelp" readonly value="{% for rol in user.roles %}{{ rol|e }},{% endfor %}">
+                    {% else %}
+                        <input type="text">
+                    {% endif %}
+                </div>
+                <div class="col">
+                    <label for="txtemailVerifcado">Correo Verificado?</label>
+                    <input id="txtemailVerifcado" type="enviroment" class="form-control" aria-describedby="envHelp" readonly value="{%if user is defined and user.emailVerified is defined%} {{ user.emailVerified ?: 'No' }} {% else%} No {% endif%}">
+                    <small id="envHelp" class="form-text text-muted"></small>
+                </div>
+            </div>
+
+            <div class="form-row row-cols-2 hide" style="" >
+                <div class="col" >
+
+                </div>
+                <div class="col" >
+
+                </div>
+            </div>
+
+            {{ form_rest(form) }}
+
+            <div class="form-group">
+                <div class="col-md-8" style="">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar
+                    </button>
+                    <a class="btn btn-secondary" href="{{ path('user_index') }}" role="button">Cancelar</a>
+                    <button type="button" class="btn btn-primary" role="button"
+                       data-toggle="modal" data-target="#changePassword">
+                        <i class="fa fa-key"></i>
+                        Cambiar Clave
+                    </button>
+                    <!-- -->
+
+                </div>
+            </div>
+
+            <div class="my-custom-class-for-errors">
+                {{ form_errors(form) }}
+                {% if error is defined %}
+                    <div class="alert alert-danger">
+                        {% if error.messageKey is defined %}
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+    <div id="tabMeta" class="tab-pane fade" role="tabpanel" aria-labelledby="nav-meta-tab">
+        {% if user is defined %}
+        {% if (user.metadata is defined) and (user.metadata.createdAt) is defined %}
+        <h3>Metadata</h3>
+        <div class="form">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">Creado el:</label>
+                    <input type="text" class="form-control disabled" disabled value="{{ user.metadata.createdAt|date("m/d/Y") }}">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword4">Ultimo Login</label>
+                    <input type="text" class="form-control" disabled value="{{ user.metadata.lastLoginAt|date("m/d/Y") }}">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword4">Ultimo cambio de clave</label>
+                    <input type="text" class="form-control" disabled value="{{ user.metadata.passwordUpdatedAt|date("m/d/Y") }}">
+                </div>
+            </div>
+        </div>
+            {% endif %}
+        {% endif %}
+    </div>
+
+</div>
+
+
+<!-- recover password -->
+<!-- Modal -->
+<div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar Contraseña</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <form action=""  class="needs-validation" novalidate method="post" name="frmResetPass" id="frmResetPass">
+                        <input type="hidden" name="id_" value="{{ user.id ?? null }}" >
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Nueva contraseña:</label>
+                            <input type="password" class="form-control" name="password" id="txtPassword" required>
+                            <div class="invalid-feedback">
+                                Debe ingresar un valor.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Confirmar contraseña:</label>
+                            <input type="password" class="form-control" name="password2" id="txtPassword2" required>
+                            <div class="invalid-feedback">
+                                Debe ingresar un valor, el mismo de arriba.
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cerrar</button>
+                    <button type="submit" class="btn btn-success"
+                        onclick="javascript:fnUpdateStatus()">Cambiar clave </button>
+                </div>
+            </div>
+        </div>
+</div>
+
+<div id="divMSG" style="display: none;">
+    <div id="msjOK" class="alert alert-success hide" role="alert">
+        Clave Cambiada satisfactoriamente.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</div>
+<div id="divERR" style="display: none;">
+    <div id="msjError" class="alert alert-danger hide" role="alert">
+        Error al intentar cambiar la clave:
+        <span id="errorMSG"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</div>
+
+
+<script lang="javascripts">
+    //
+
+    function fnUpdateStatus() {
+        event.preventDefault();
+        //validate;
+
+        if ( $('#frmResetPass')[0].checkValidity() ) {
+            $('#changePassword').modal('hide');
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/user/updatePassword",
+                data: {
+                    id_: '',
+                    p1: $('#txtPassword').val(),
+                    p2: $('#txtPassword2').val()//new state
+                },
+                success: function (data) {
+                    //$('#divMSG')[0].style.visibility = 'visible';     // Show
+                    alert("Clave cambiada satisfactoriamente!");
+                    $('#frmResetPass')[0].reset;
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Error al intentar cambiar la clave! :' + xhr.responseText);
+                    $('#errorMSG').html(xhr.responseText);
+                    //$('#divERR')[0].style.visibility = 'visible';     // Show
+                    alert("ERROR!:" + xhr.responseText );
+                    return false;
+                }
+            });
+        }else{
+            $('#frmResetPass')[0].classList.add('was-validated');
+        }
+    };
+
+</script>

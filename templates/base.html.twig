@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>{% block title %}Chocoyo{% endblock %}</title>
+
+    {% block stylesheets %}{% endblock %}
+
+    <!-- Fuentes -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- bootStrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+    <!-- custom style -->
+    <style type="text/css">
+        @media (min-width: 1600px) {
+            .container{
+                max-width: 980px;
+            }
+        }
+    </style>
+    {% block javascriptsHeader %} {% endblock %}
+
+</head>
+
+
+<body >
+
+        {% if app.user %}
+            <!-- navBar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="height: 70px;">
+
+            <a class="navbar-brand" href="#">
+                <img src="{{ asset('assets/img/bmo_logo.jpeg') }}" width="100px;" />
+            </a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
+
+            <ul class="nav navbar-nav navbar-right">
+
+            <li><a class="nav-link active" href="{{ path('home') }}">Pizarra</a></li>
+            <div class="nav-item dropdown">
+
+                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action">
+                    {% if user is defined %}
+                        <img src="{{ user.photo }}" class="avatar" alt="Avatar" width="40px;" style="border-radius: 50%;border-width: 1px;border: black ">
+                    {% else %}
+                        <img src="/assets/img/male-vector-user-3.png" class="avatar" alt="Avatar" width="40px;">
+                    {% endif %}
+                    {{ app.user.username }}<b class="caret"></b>
+                </a>
+
+                <div class="dropdown-menu">
+                    <a href="{{ path('getProfile', {'id': app.user.id }) }}" class="dropdown-item"><i class="fa fa-user-o"></i> Perfil</a></a>
+                    <a href="{{ path('teacher_index') }}" class="dropdown-item"><i class="fa fa-briefcase"></i> Profesores</a></a>
+                    <a href="{{ path('student_index') }}" class="dropdown-item"><i class="fa fa-users"></i> Estudiantes</a></a>
+                    <div class="dropdown-divider"></div>
+                    <!-- just for ADmin -->
+                    {% if app.user.isAdmin %}
+                        <a class="dropdown-item" href="{{ path('user_index') }}"><i class="fa fa-users"></i>  Usuarios</a>
+                        <a class="dropdown-item" href="{{ path('setting') }}"><i class="fa fa-briefcase"></i> Clientes</a>
+                        <a class="dropdown-item" href="{{ path('setting') }}"><i class="fa fa-cog"></i> Configuración</a>
+                    {% endif %}
+                    <!--  End just for admin-->
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ path('app_logout') }}" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Salir</a></a>
+                </div>
+            </div>
+
+
+            </ul>
+        </nav>
+        <!-- END navBar -->
+
+        {% else %}
+        {% endif %}
+
+<div class="container">
+    {% block body %}{% endblock %}
+</div>
+
+{% block javascripts %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Configuracio{% endblock %}
+
+{% block body %}
+
+    <h2>Configuracion de la aplicación</h2>
+    <br/>
+
+    <form>
+        <div class="form-row row-cols-2">
+            <div class="col">
+                <label for="enviroment">Ambiente Actual WEB</label>
+                <input id="enviroment" type="text" class="form-control" aria-describedby="envHelp" readonly value="{{ app.environment }}">
+                <small id="envHelp" class="form-text text-muted">Ambiente en el que estamos trabajando.</small>
+            </div>
+            <div class="col">
+                <label for="enviromentIntuit">Intuit Ambiente</label>
+                <input id="enviromentIntuit" type="text" class="form-control" aria-describedby="envIHelp" readonly value="{{ baseUrl }}">
+                <small id="envIHelp" class="form-text text-muted">Es una aplicacion en Desarrollo o ya liberada?</small>
+            </div>
+        </div>
+
+        <div class="form-row row-cols-2">
+            <div class="col" >
+                <label for="txtsecret">Secret</label>
+                <input id="txtsecret" type="email" class="form-control"  aria-describedby="secretHelp" readonly value="{{ ClientSecret }}">
+                <small id="secretHelp" class="form-text text-muted">Clave de conexion de la APP.</small>
+            </div>
+            <div class="col">
+                <label for="txtClientID">Client ID</label>
+                <input id="txtClientID" type="text" class="form-control" readonly value="{{ ClientID }}">
+            </div>
+        </div>
+
+        <div class="form-row row-cols-2">
+            <div class="col">
+                <label for="exampleInputPassword1">Redirect</label>
+                <input type="text" class="form-control"  readonly value="{{ RedirectURI }}" >
+            </div>
+            <div class="col">
+                <label for="exampleInputPassword1">Scope</label>
+                <input type="text" class="form-control"  readonly value="{{ scope }}" >
+            </div>
+        </div>
+
+        
+
+    </form>
+
+{% endblock %}

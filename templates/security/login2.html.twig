@@ -1,0 +1,129 @@
+{# templates/security/login.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block stylesheets  %}
+    <style>
+        .login-form {
+            width: 340px;
+            margin: 30px auto;
+            font-size: 15px;
+        }
+        .login-form form {
+            margin-bottom: 15px;
+            background: #f7f7f7;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+        .login-form h2 {
+            margin: 0 0 15px;
+        }
+        .login-form .hint-text {
+            color: #777;
+            padding-bottom: 15px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .form-control, .btn {
+            min-height: 38px;
+            border-radius: 2px;
+        }
+        .login-btn {
+            font-size: 15px;
+            font-weight: bold;
+        }
+        .or-seperator {
+            margin: 20px 0 10px;
+            text-align: center;
+            border-top: 1px solid #ccc;
+        }
+        .or-seperator i {
+            padding: 0 10px;
+            background: #f7f7f7;
+            position: relative;
+            top: -11px;
+            z-index: 1;
+        }
+        .social-btn .btn {
+            margin: 10px 0;
+            font-size: 15px;
+            text-align: left;
+            line-height: 24px;
+        }
+        .social-btn .btn i {
+            float: left;
+            margin: 4px 15px  0 5px;
+            min-width: 15px;
+        }
+        .input-group-addon .fa{
+            font-size: 18px;
+        }
+    </style>
+
+{% endblock %}
+
+{% block javascriptsHeader %}
+    <!-- Import and configure the Firebase SDK -->
+    <!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
+    <!-- If you do not serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup -->
+    <script src="http://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <script src="http://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+    <script src="{{ asset('assets/js/settings.js') }}"></script>
+    <script src="{{ asset('assets/js/alert-util.js') }}"></script>
+
+{% endblock %}
+
+
+{% block body %}
+
+    <div class="login-form">
+        <form class="form-horizontal" role="form" method="post" action="">
+
+            <h2 class="text-center">Iniciar Session</h2>
+            <div class="text-center social-btn">
+
+            </div>
+            <div class="or-seperator"><i>&nbsp;</i></div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <span class="fa fa-user"></span>
+                    </span>
+                    </div>
+                    <input id="inputEmail" type="email" class="form-control"  name="email" placeholder="Username(email)" value="{{ last_username }}" required autofocus />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fa fa-lock"></i>
+                    </span>
+                    </div>
+                    <input id="inputPassword" type="password" class="form-control" name="password" placeholder="Password" required />
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+                <button type="button" class="btn btn-success btn-block login-btn" onclick="javascript:toggleSignIn(this);">
+                    <i class="fa fa-btn fa-sign-in"> Entrar</i>
+                </button>
+            </div>
+            <div class="clearfix">
+                <a href="#" class="float-right text-success">¿Olvidastes tu clave?</a>
+            </div>
+        </form>
+        <section>
+            <div>
+                <div  data-alerts="alerts"  id="box-alert" data-ids="box-alert" data-fade="3000"></div>
+            </div>
+        </section>
+    </div>
+    <script>
+        $('.alert').alert();
+    </script>
+    <script src="{{ asset('assets/js/login_form.js') }}"></script>
+
+{% endblock %}
