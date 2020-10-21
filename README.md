@@ -15,3 +15,5 @@ Además, automatiza las tareas más comunes, permitiendo al desarrollador dedica
 ## Licencia.
 
 ## Como instalar.
+
+## Como colaborar
