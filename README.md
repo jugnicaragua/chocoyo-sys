@@ -1,3 +1,7 @@
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=jugnicaragua_chocoyo-sys)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jugnicaragua_chocoyo-sys&metric=alert_status)](https://sonarcloud.io/dashboard?id=jugnicaragua_chocoyo-sys)
+
+
 # chocoyo-sys
 Sistema para la gestion pedagogica de las escuelas de primaria y/a secundaria. 
 
